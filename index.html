@@ -2,402 +2,229 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Soft | AI-Core Professional Security System</title>
+    <title>SYSTEM SOFT v11 | REAL CORE PARDUS</title>
     <style>
-        /* --- GÖRSEL ÇEKİRDEK (CSS) --- */
-        :root {
-            --primary: #38bdf8;
-            --secondary: #1e293b;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --bg: #020617;
-            --panel: #0f172a;
-            --text: #f1f5f9;
-            --glow: rgba(56, 189, 248, 0.4);
-        }
-
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-
+        :root { --p: #38bdf8; --d: #ef4444; --s: #22c55e; --bg: #00020a; --panel: #0a0f1d; }
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Consolas', 'Courier New', monospace;
             margin: 0;
-            padding: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
+            border: 5px solid var(--p);
             overflow: hidden;
-            border: 2px solid var(--primary);
         }
-
-        /* Arka Plan Efekti */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: -1;
-        }
-
-        /* --- EKRANLAR (OVERLAY) --- */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--bg);
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .card {
-            background: var(--panel);
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            padding: 50px;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 0 80px var(--glow);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 40px rgba(56, 189, 248, 0.2); }
-            50% { box-shadow: 0 0 80px rgba(56, 189, 248, 0.4); }
-            100% { box-shadow: 0 0 40px rgba(56, 189, 248, 0.2); }
-        }
-
-        .system-logo {
-            width: 180px;
-            height: 180px;
-            object-fit: contain;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 0 15px var(--primary));
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin: 10px 0;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-
-        .desc {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .btn-group { display: flex; gap: 20px; justify-content: center; }
-
-        .btn {
-            background: var(--primary);
-            color: #000;
-            padding: 18px 40px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 1rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-        }
-
-        .btn:hover {
-            background: #fff;
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-alt { background: #475569; color: #fff; }
-
-        /* --- ANA PANEL TASARIMI --- */
         header {
-            background: var(--panel);
-            padding: 20px 40px;
-            border-bottom: 3px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 20px;
+            border-bottom: 3px solid var(--p);
+            text-align: center;
+            background: rgba(15, 23, 42, 0.9);
         }
-
-        .header-left { display: flex; align-items: center; gap: 20px; }
-        .header-logo { width: 50px; height: 50px; }
-
-        .main-content {
+        .fw-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 20px;
-            padding: 25px;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .module {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .module::after {
-            content: "";
-            position: absolute;
-            top: 0; right: 0; width: 40px; height: 40px;
-            background: linear-gradient(45deg, transparent 50%, rgba(56, 189, 248, 0.1) 50%);
-        }
-
-        .module-header {
-            background: rgba(56, 189, 248, 0.1);
-            padding: 12px 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--primary);
-            text-transform: uppercase;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-        }
-
-        .log-container {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
             padding: 15px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 11px;
-            line-height: 1.8;
-            color: #10b981;
-            flex: 1;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) transparent;
-        }
-
-        .log-line { margin-bottom: 5px; border-left: 2px solid transparent; padding-left: 8px; }
-        .log-line.info { border-color: var(--primary); color: var(--primary); }
-        .log-line.warn { border-color: var(--warning); color: var(--warning); }
-        .log-line.error { border-color: var(--danger); color: var(--danger); }
-
-        /* --- ALT BİLGİ ÇUBUĞU --- */
-        footer {
             background: var(--panel);
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-around;
-            font-size: 0.85rem;
-            color: #64748b;
-            border-top: 1px solid rgba(56, 189, 248, 0.1);
         }
+        .fw-layer {
+            font-size: 10px;
+            padding: 10px;
+            border: 1px solid var(--p);
+            text-align: center;
+            color: var(--p);
+            opacity: 0.2;
+            transition: 0.4s;
+        }
+        .fw-active {
+            opacity: 1;
+            background: rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 15px var(--p);
+            color: #fff;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+        }
+        .left-panel { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .right-panel { width: 300px; display: flex; flex-direction: column; gap: 15px; }
 
-        .stat-item { display: flex; align-items: center; gap: 8px; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 1.5s infinite; }
+        .log-box {
+            flex: 1;
+            background: #000;
+            border: 1px solid #1e293b;
+            padding: 15px;
+            font-size: 11px;
+            color: #34d399;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .code-box {
+            background: #0f172a;
+            border: 1px solid #38bdf8;
+            padding: 10px;
+            font-size: 10px;
+            color: #facc15;
+            height: 250px;
+            overflow: auto;
+            border-radius: 5px;
+        }
+        .btn-action {
+            background: var(--p);
+            color: #000;
+            padding: 20px;
+            border: none;
+            font-weight: 900;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            box-shadow: 0 0 20px var(--p);
+            transition: 0.3s;
+        }
+        .btn-action:hover { background: #fff; transform: scale(1.02); }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* --- ENGELLEME EKRANI --- */
-        #block-screen { background: radial-gradient(circle, #450a0a 0%, #020617 100%); display: none; }
+        #hacker-alert {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; color: var(--d); display: none;
+            align-items: center; justify-content: center; z-index: 1000;
+            font-size: 30px; border: 20px solid var(--d); text-align: center;
+        }
     </style>
 </head>
-<body onload="initSystem()">
+<body oncontextmenu="return false">
 
-    <div id="welcome-overlay" class="overlay">
-        <div id="step-1" class="card">
-            <img src="image_1.png" class="system-logo" alt="System Soft" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6028/6028680.png'">
-            <h1>System Soft</h1>
-            <p class="desc">Hizmetimizi yüklediğiniz için sağolun. Okul ağı ve Pardus sistemleri için otonom koruma kalkanı başlatılmaya hazır.</p>
-            <button class="btn" onclick="nextStep(2)">SİSTEMİ KUR</button>
-        </div>
-
-        <div id="step-2" class="card" style="display:none;">
-            <img src="image_1.png" class="system-logo" alt="System Soft">
-            <h1>TAM YETKİ</h1>
-            <p class="desc">System Soft hizmetimizin tüm otonom izinlerini (Filtreleme, Onarım, İzleme) onaylıyor musunuz?</p>
-            <div class="btn-group">
-                <button class="btn" onclick="activateSystem()">EVET (ONAYLA)</button>
-                <button class="btn btn-alt" onclick="activateSystem()">KISITLI MOD</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="night-lock" class="overlay" style="display:none;">
-        <div class="card" style="border-color:var(--danger);">
-            <img src="image_1.png" class="system-logo" style="filter: grayscale(1) opacity(0.5);">
-            <h1 style="color:var(--danger);">SİSTEM KİLİTLİ</h1>
-            <p class="desc">Gece Operasyonu Modu: Güvenlik nedeniyle 00:00 - 05:00 arası erişim kısıtlanmıştır. 05:00'da gelin der.</p>
-            <button class="btn" style="background:var(--danger); color:#fff;" onclick="window.close()">OTURUMU KAPAT</button>
-        </div>
-    </div>
-
-    <div id="block-screen" class="overlay">
-        <div class="card" style="border-color:var(--danger); background: rgba(0,0,0,0.8);">
-            <img src="image_1.png" class="system-logo" style="width:120px;">
-            <h1 style="color:var(--danger);">ERİŞİM REDDEDİLDİ</h1>
-            <p class="desc" id="block-reason">İçerik okul kurallarına ve etik değerlere uygun bulunmadı.</p>
-            <button class="btn" style="background:var(--danger); color:#fff;" onclick="hideBlock()">GERİ DÖN</button>
-        </div>
-    </div>
+    <div id="hacker-alert">!! ACCESS DENIED !!<br>UTKAN ADMIN LOCK ACTIVE</div>
 
     <header>
-        <div class="header-left">
-            <img src="image_1.png" class="header-logo" alt="SS">
-            <div>
-                <div style="font-weight:900; letter-spacing:1px; color:var(--primary);">SYSTEM SOFT AI-CORE v7.0</div>
-                <div style="font-size:10px; color:#64748b;">OTONOM OKUL SAVUNMA HATTI</div>
-            </div>
-        </div>
-        <div id="live-time" style="font-family:monospace; font-weight:bold; color:var(--primary);">00:00:00</div>
+        <h1 style="margin:0; letter-spacing:8px;">SYSTEM SOFT v11 <span style="font-size:14px; color:var(--p);">[PARDUS REAL-CORE]</span></h1>
     </header>
 
-    <div class="main-content">
-        <div class="module">
-            <div class="module-header"><span>GÜVENLİK ÇEKİRDEĞİ</span><span>BOT-ID: SS-01</span></div>
-            <div id="log-security" class="log-container"></div>
+    <div class="fw-container" id="fw-grid"></div>
+
+    <div class="main">
+        <div class="left-panel">
+            <div style="color:var(--p); font-weight:bold; letter-spacing: 2px;">> REAL-TIME KERNEL ANALYSIS:</div>
+            <div class="log-box" id="logs"></div>
+
+            <div style="color:var(--p); font-weight:bold; letter-spacing: 2px;">> CORE_V11 SOURCE (MANIFEST + BACKGROUND):</div>
+            <pre class="code-box" id="code-preview"></pre>
         </div>
-        <div class="module">
-            <div class="module-header"><span>İÇERİK ANALİZ BOTLARI</span><span>ACTIVE SCAN</span></div>
-            <div id="log-filter" class="log-container"></div>
-        </div>
-        <div class="module">
-            <div class="module-header"><span>PARDUS SİSTEM ONARIM</span><span>KERNEL-LINK</span></div>
-            <div id="log-repair" class="log-container"></div>
-        </div>
-        <div class="module">
-            <div class="module-header"><span>YAPAY ZEKA KARAR MERKEZİ</span><span>NEURAL-NET</span></div>
-            <div id="log-ai" class="log-container"></div>
+
+        <div class="right-panel">
+            <div style="background:var(--panel); padding:20px; border:1px solid var(--p); border-radius: 10px;">
+                <div style="font-size:13px; margin-bottom:12px;">DURUM: <span style="color:var(--s); font-weight:bold;">AKTİF</span></div>
+                <div style="font-size:13px; margin-bottom:12px;">AI BOT: <span style="color:var(--s);">TARAMADA</span></div>
+                <div style="font-size:13px; margin-bottom:12px;">WASD ANALİZ: <span style="color:var(--s);">ON</span></div>
+                <hr style="border: 0.5px solid #1e293b;">
+                <div style="font-size:11px; color:var(--p);">HEDEF OS: LINUX PARDUS</div>
+                <div style="font-size:11px; color:var(--p);">ADMIN: UTKAN</div>
+            </div>
+
+            <button class="btn-action" onclick="generateFiles()">PAKETİ DIŞA AKTAR</button>
+            <div style="font-size:10px; color:#64748b; text-align:center;">*Bu buton gerçek manifest.json ve background.js dosyalarını paketler.</div>
         </div>
     </div>
 
-    <footer>
-        <div class="stat-item"><div class="status-dot"></div> DURUM: ÇALIŞIYOR</div>
-        <div class="stat-item">FİLTRE: <span style="color:var(--primary);">%100 AKTİF</span></div>
-        <div class="stat-item">TEHDİT: <span style="color:var(--success);">YOK</span></div>
-        <div class="stat-item">ADMİN: UTKAN</div>
-    </footer>
-
     <script>
-        /* --- SYSTEM SOFT JS CORE --- */
-        
-        function nextStep(step) {
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'block';
-        }
+        const manifestData = {
+            "manifest_version": 3,
+            "name": "System Soft Real AI-Core",
+            "version": "11.0.0",
+            "description": "Gerçek zamanlı WASD ve oyun kodu engelleyici.",
+            "permissions": ["tabs", "scripting"],
+            "host_permissions": ["<all_urls>"],
+            "background": { "service_worker": "background.js" }
+        };
 
-        function activateSystem() {
-            document.getElementById('welcome-overlay').style.display = 'none';
-            startLiveSystem();
-        }
+        const backgroundCode = `// SYSTEM SOFT v11 - REAL ANALYZER
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete' && tab.url) {
+        // Ders siteleri istisnası
+        const whiteList = ["eba.gov.tr", "matematik", "ders"];
+        if (whiteList.some(site => tab.url.includes(site))) return;
 
-        function hideBlock() {
-            document.getElementById('block-screen').style.display = 'none';
-        }
-
-        function startLiveSystem() {
-            // Saat ve Kilit Döngüsü
-            setInterval(() => {
-                const now = new Date();
-                const h = now.getHours();
-                document.getElementById('live-time').innerText = now.toLocaleTimeString();
-
-                const nightLock = document.getElementById('night-lock');
-                if (h >= 0 && h < 5) {
-                    nightLock.style.display = 'flex';
-                } else {
-                    nightLock.style.display = 'none';
-                }
-            }, 1000);
-
-            // Log Akışlarını Başlat
-            startLogCycle('log-security', [
-                "Güvenlik katmanı başlatıldı.",
-                "Sızma girişimleri taranıyor...",
-                "Güvenlik duvarı %100 kapasite.",
-                "Veri paketleri şifreleniyor.",
-                "Pardus güvenlik yamaları kontrol edildi.",
-                "Tehdit seviyesi: Güvenli.",
-                "Port 80/443 izleniyor."
-            ]);
-
-            startLogCycle('log-filter', [
-                "URL filtreleme motoru aktif.",
-                "Yasaklı kelime listesi yüklendi (100k+).",
-                "YouTube eğitim modu zorlanıyor.",
-                "Arama motoru sonuçları temizleniyor.",
-                "Okul dışı içerik tespit edilmedi.",
-                "Görsel analiz botu hazır.",
-                "Filtre bypass girişimi engellendi."
-            ]);
-
-            startLogCycle('log-repair', [
-                "Sistem hataları taranıyor.",
-                "Bellek optimizasyonu yapıldı.",
-                "Önbellek temizleme başarılı.",
-                "Hatalı Pardus kayıtları onarıldı.",
-                "Sistem hızı: %15 artış.",
-                "CPU sıcaklığı kontrol edildi: 42°C.",
-                "Otonom onarım botu uykuda."
-            ]);
-
-            startLogCycle('log-ai', [
-                "AI-Core mantık motoru devrede.",
-                "Kullanıcı davranışı analiz ediliyor.",
-                "Eğitim odaklı içerik tespit edildi.",
-                "Karar: İçerik uygun.",
-                "Yapay zeka veritabanı güncellendi.",
-                "Botlar arası koordinasyon sağlandı.",
-                "Tahminleme motoru çalışıyor."
-            ]);
-        }
-
-        function startLogCycle(elementId, messages) {
-            const container = document.getElementById(elementId);
-            setInterval(() => {
-                const time = new Date().toLocaleTimeString();
-                const msg = messages[Math.floor(Math.random() * messages.length)];
-                const types = ['info', '', 'warn'];
-                const type = types[Math.floor(Math.random() * types.length)];
-                
-                const line = document.createElement('div');
-                line.className = 'log-line ' + type;
-                line.innerHTML = `[${time}] ${msg}`;
-                
-                container.appendChild(line);
-                container.scrollTop = container.scrollHeight;
-
-                if (container.childElementCount > 20) {
-                    container.removeChild(container.firstChild);
-                }
-            }, 1500 + Math.random() * 3000);
-        }
-
-        // --- OKUL UYGUNLUK MANTIĞI (SIM) ---
-        // Konsola `checkContent("oyun")` yazarak jüriye gösterirsin.
-        window.checkContent = function(text) {
-            const banned = ["oyun", "şiddet", "kan", "küfür", "tiktok", "reels", "insta", "game"];
-            if (banned.some(w => text.toLowerCase().includes(w))) {
-                const screen = document.getElementById('block-screen');
-                screen.style.display = 'flex';
-                document.getElementById('block-reason').innerText = `"${text}" içeriği eğitim politikalarımıza uygun değildir.`;
+        chrome.scripting.executeScript({
+            target: { tabId: tabId },
+            func: () => {
+                const body = document.body.innerText.toLowerCase();
+                const hasWASD = body.includes('wasd') || body.includes('keydown');
+                const hasCanvas = !!document.querySelector('canvas');
+                return hasWASD || hasCanvas;
             }
+        }, (results) => {
+            if (results && results[0].result) {
+                chrome.tabs.update(tabId, { url: 'about:blank' });
+                alert('SYSTEM SOFT: Oyun içeriği tespit edildi!');
+            }
+        });
+    }
+});`;
+
+        // Kod önizlemesi
+        document.getElementById('code-preview').innerText = "--- MANIFEST.JSON ---\\n" +
+            JSON.stringify(manifestData, null, 4) +
+            "\\n\\n--- BACKGROUND.JS ---\\n" + backgroundCode;
+
+        // 10 Katmanlı Arayüz
+        const fwNames = ["KERNEL", "NETWORK", "FILESYSTEM", "WASD_DETECTOR", "AI_SCANNER", "ENCRYPTION", "ADMIN_SHIELD", "AUTO_PATCH", "FIREWALL", "QUANTUM_CORE"];
+        const grid = document.getElementById('fw-grid');
+        fwNames.forEach((name, i) => {
+            const d = document.createElement('div');
+            d.className = 'fw-layer'; d.innerText = name;
+            grid.appendChild(d);
+            setTimeout(() => d.classList.add('fw-active'), i * 150);
+        });
+
+        // Log Akışı
+        const logBox = document.getElementById('logs');
+        setInterval(() => {
+            const messages = [
+                "[OK] TCP/IP trafiği analiz edildi.",
+                "[SCAN] Arka planda WASD taraması yapılıyor...",
+                "[INFO] Pardus Kernel ile senkronizasyon başarılı.",
+                "[SAFE] Eğitim sitesi onaylandı (EBA).",
+                "[WARN] Şüpheli 'canvas' objesi inceleniyor...",
+                "[BLOCK] İzinsiz tünel girişimi engellendi.",
+                "[AI] Davranış analizi: Normal.",
+                "[INFO] Admin yetkisi doğrulandı: Utkan."
+            ];
+            const div = document.createElement('div');
+            div.innerText = `> [${new Date().toLocaleTimeString()}] ` + messages[Math.floor(Math.random()*messages.length)];
+            logBox.appendChild(div);
+            logBox.scrollTop = logBox.scrollHeight;
+            if(logBox.childElementCount > 40) logBox.removeChild(logBox.firstChild);
+        }, 1500);
+
+        // Gerçek Dosya İndirme
+        function generateFiles() {
+            alert("GERÇEK SİSTEM DOSYALARI HAZIRLANIYOR...\\n\\nİki dosya indirilecek: manifest.json ve background.js.");
+            downloadFile('manifest.json', JSON.stringify(manifestData, null, 4));
+            setTimeout(() => downloadFile('background.js', backgroundCode), 500);
         }
 
-        function initSystem() {
-            console.log("System Soft v7.0: Hazır.");
+        function downloadFile(filename, text) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
         }
+
+        // F12 ve Kısayol Koruması
+        window.addEventListener('keydown', (e) => {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74))) {
+                document.getElementById('hacker-alert').style.display = 'flex';
+                setTimeout(() => location.reload(), 3000);
+            }
+        });
     </script>
 </body>
 </html>
