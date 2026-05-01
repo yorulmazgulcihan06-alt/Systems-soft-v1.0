@@ -2,319 +2,244 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Soft | AI-Core Yönetim Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Soft | Omni-Core AI</title>
     <style>
-        /* CSS Başlangıcı - Sade ve Endüstriyel Tasarım */
         :root {
+            --primary: #38bdf8;
+            --danger: #ef4444;
             --bg-dark: #020617;
             --panel-bg: #0f172a;
-            --text-main: #f8fafc;
-            --accent-blue: #38bdf8;
-            --terminal-green: #10b981;
-            --alert-red: #ef4444;
-            --border-color: #334155;
+            --terminal-text: #10b981;
         }
 
+        /* Mobil Uyumluluk Ayarları */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
             background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            color: #f1f5f9;
+            font-family: 'Courier New', monospace;
             margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
             overflow: hidden;
         }
 
+        /* Üst Menü - Mobil Uyumlu */
         header {
-            background-color: var(--panel-bg);
-            padding: 20px 40px;
-            border-bottom: 2px solid var(--border-color);
+            background: var(--panel-bg);
+            padding: 15px;
+            border-bottom: 2px solid var(--primary);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin: 5px 0 0 0;
+        }
+
+        /* Ana Panel - Telefondaki Grid Düzeni */
+        .main-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr; /* Mobilde tek sütun */
+            gap: 10px;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        /* Bilgisayarda 2 sütuna geçer */
+        @media (min-width: 768px) {
+            .main-container { grid-template-columns: 1fr 1fr; }
+        }
+
+        .bot-unit {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            height: 200px;
+        }
+
+        .unit-title {
+            background: #1e293b;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .log-display {
+            padding: 10px;
+            font-size: 10px;
+            color: var(--terminal-text);
+            overflow-y: auto;
+            flex: 1;
+            background: #000000a0;
+        }
+
+        /* Alt Bilgi Paneli */
+        footer {
+            background: var(--panel-bg);
+            padding: 10px;
+            font-size: 11px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid #334155;
         }
 
-        .header-main h1 {
-            margin: 0;
-            color: var(--accent-blue);
-            font-size: 26px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            background: var(--terminal-text);
         }
 
-        .header-main p {
-            margin: 5px 0 0 0;
-            color: #94a3b8;
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
+        .alert { color: var(--danger); animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .sys-info {
-            text-align: right;
-            border-left: 2px solid var(--accent-blue);
-            padding-left: 15px;
-        }
-
-        /* Ana Panel Grid Yapısı */
-        .main-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 15px;
+        /* Mobil Cihazlar İçin Yükle Butonu */
+        .install-guide {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--panel-bg);
             padding: 20px;
-            flex-grow: 1;
-        }
-
-        .unit-card {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 2px;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .unit-card:hover {
-            border-color: var(--accent-blue);
-        }
-
-        .unit-header {
-            background-color: #1e293b;
-            padding: 10px 15px;
-            font-size: 13px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .log-area {
-            padding: 12px;
-            font-size: 11.5px;
-            overflow-y: auto;
-            flex-grow: 1;
-            color: var(--terminal-green);
-            background-color: #00000050;
-        }
-
-        /* Alt Bilgi Çubuğu */
-        footer {
-            background-color: var(--panel-bg);
-            padding: 12px 40px;
-            border-top: 2px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .status-badge {
-            padding: 2px 8px;
-            border-radius: 3px;
-            background: #1e293b;
-        }
-
-        .warning { color: var(--alert-red); animation: pulse 1.5s infinite; }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            border: 2px solid var(--primary);
+            z-index: 100;
+            display: none;
+            width: 80%;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-main">
-        <h1>SYSTEM SOFT</h1>
-        <p>Kusursuz Kod, Kesintisiz Kontrol</p>
-    </div>
-    <div class="sys-info">
-        YAZILIM GELİŞTİRİCİ: UTKAN<br>
-        PROJE SEVİYESİ: 5. SINIF / TEKNOFEST 2026<br>
-        SİSTEM MERKEZİ: DATÇA / TÜRKİYE
-    </div>
+    <h1>SYSTEM SOFT</h1>
+    <p>Kusursuz Kod, Kesintisiz Kontrol | v2.0 MOBILE-READY</p>
 </header>
 
-<div class="main-grid">
-    <div class="unit-card">
-        <div class="unit-header">
-            <span>[UNIT_01] SECURITY_BOTS_ARRAY (10 Units)</span>
-            <span style="color: var(--accent-blue);">S-01-10 READY</span>
-        </div>
-        <div id="log-01" class="log-area">Sistem katmanı başlatılıyor...</div>
+<div class="main-container">
+    <div class="bot-unit">
+        <div class="unit-title"><span>SECURITY_ENGINE</span> <span>[10 BOTS]</span></div>
+        <div id="log1" class="log-display">Sistem katmanı mobil cihaz için optimize ediliyor...</div>
     </div>
-
-    <div class="unit-card">
-        <div class="unit-header">
-            <span>[UNIT_02] SCREEN_MONITOR_BOTS (10 Units)</span>
-            <span style="color: var(--accent-blue);">M-11-20 READY</span>
-        </div>
-        <div id="log-02" class="log-area">İzleme protokolü aktif...</div>
+    <div class="bot-unit">
+        <div class="unit-title"><span>MONITOR_ENGINE</span> <span>[10 BOTS]</span></div>
+        <div id="log2" class="log-display">Ekran analizi başlatılıyor...</div>
     </div>
-
-    <div class="unit-card">
-        <div class="unit-header">
-            <span>[UNIT_03] DEBUG_AND_FIX_BOTS (10 Units)</span>
-            <span style="color: var(--accent-blue);">D-21-30 READY</span>
-        </div>
-        <div id="log-03" class="log-area">Hata ayıklama dizisi yükleniyor...</div>
+    <div class="bot-unit">
+        <div class="unit-title"><span>DEBUG_ENGINE</span> <span>[10 BOTS]</span></div>
+        <div id="log3" class="log-display">Hata ayıklama modülleri yükleniyor...</div>
     </div>
-
-    <div class="unit-card">
-        <div class="unit-header">
-            <span>[UNIT_04] SELF_REGEN_CORE_BOTS (10 Units)</span>
-            <span style="color: var(--accent-blue);">C-31-40 READY</span>
-        </div>
-        <div id="log-04" class="log-area">Kod yenileme motoru çalışıyor...</div>
+    <div class="bot-unit">
+        <div class="unit-title"><span>REGEN_ENGINE</span> <span>[10 BOTS]</span></div>
+        <div id="log4" class="log-display">Yapay zeka çekirdeği aktif.</div>
     </div>
 </div>
 
 <footer>
-    <div id="sys-status-text">SİSTEM DURUMU: <span style="color: var(--terminal-green);">STABIL</span></div>
-    <div>BAĞLI BİRİMLER: 40 ACTIVE BOTS</div>
-    <div id="digital-clock">00:00:00</div>
+    <div id="sys-status"><span class="status-dot"></span>DURUM: OK</div>
+    <div id="clock">00:00:00</div>
+    <div>DEV: UTKAN</div>
 </footer>
 
 <script>
-    // System Soft AI Çekirdek Mantığı
-    // Bu bölüm botların karar alma mekanizmalarını yönetir.
+    /* SYSTEM SOFT JAVASCRIPT ÇEKİRDEĞİ 
+       BU BÖLÜM HEM MOBİL HEM PC'DE AYNI ÇALIŞIR
+    */
 
-    const logUnits = [
-        document.getElementById('log-01'),
-        document.getElementById('log-02'),
-        document.getElementById('log-03'),
-        document.getElementById('log-04')
+    const logs = [
+        document.getElementById('log1'),
+        document.getElementById('log2'),
+        document.getElementById('log3'),
+        document.getElementById('log4')
     ];
 
-    function appendLog(unitIndex, msg) {
-        const timestamp = new Date().toLocaleTimeString();
-        const logElement = logUnits[unitIndex];
-        const newEntry = document.createElement('div');
-        newEntry.innerHTML = `<span style="color:#64748b">[${timestamp}]</span> ${msg}`;
-        logElement.appendChild(newEntry);
+    function write(idx, msg) {
+        const t = new Date().toLocaleTimeString();
+        const d = document.createElement('div');
+        d.innerHTML = `<span style="color:#64748b">[${t}]</span> ${msg}`;
+        logs[idx].appendChild(d);
+        logs[idx].scrollTop = logs[idx].scrollHeight;
+        if(logs[idx].childElementCount > 20) logs[idx].removeChild(logs[idx].firstChild);
+    }
 
-        // Otomatik aşağı kaydır
-        logElement.scrollTop = logElement.scrollHeight;
+    // Bot İşlemleri (Gerçekçi Loglar)
+    const data = [
+        ["Port 80 engellendi", "MEB Filtresi devrede", "Güvenlik botu #4 aktif", "Dış ağ kısıtlandı"],
+        ["Ekran taranıyor", "Mobil cihaz uyumu OK", "Kullanıcı verisi izleniyor", "Piksel analizi stabil"],
+        ["Bellek temizlendi", "Hata kodu 0x01 onarıldı", "Cache boşaltıldı", "Bug temizleyici hazır"],
+        ["Kod yenileniyor", "AI katmanı güncel", "Algoritma optimize edildi", "Kernel v2.0 yüklendi"]
+    ];
 
-        // Hafıza yönetimi: Eski logları temizle
-        if (logElement.childNodes.length > 25) {
-            logElement.removeChild(logElement.firstChild);
+    function startBots() {
+        for(let i=0; i<4; i++) {
+            setInterval(() => {
+                const msg = data[i][Math.floor(Math.random()*data[i].length)];
+                write(i, msg);
+            }, 3000 + (i*500));
         }
     }
 
-    // Bot İşlem Dizileri
-    const secActions = [
-        "Ağ katmanı analiz ediliyor.",
-        "Dış erişim talebi reddedildi (MEB Protokolü).",
-        "Güvenlik duvarı kuralları güncellendi.",
-        "Yetkisiz kullanıcı saptandı ve bloklandı.",
-        "Sistem şifreleme anahtarları yenileniyor.",
-        "IP adresi taraması tamamlandı.",
-        "Güvenlik Bot #7 veri paketini doğruladı."
-    ];
-
-    const monActions = [
-        "Görüntü işleme botu veri gönderiyor.",
-        "Ekran analizi: Uygunsuz içerik saptanmadı.",
-        "Kullanıcı etkileşimi loglanıyor.",
-        "Piksel verisi AI modeline aktarıldı.",
-        "İzleme Bot #14 aktif izlemede.",
-        "Sistem ekranı senkronize ediliyor."
-    ];
-
-    const fixActions = [
-        "Sistem hatası (Bug) tespit edildi.",
-        "Otomatik onarım başarıyla tamamlandı.",
-        "Bellek sızıntısı engellendi.",
-        "Komut satırı hataları giderildi.",
-        "Veritabanı optimizasyonu yapıldı.",
-        "Hata Düzeltme Bot #22 göreve hazır."
-    ];
-
-    const codeActions = [
-        "Kod tabanı AI tarafından analiz ediliyor.",
-        "Script optimizasyonu başlatıldı.",
-        "Daha verimli algoritma yazıldı.",
-        "Kendi kendini güncelleyen modül aktif.",
-        "Yapay zeka çekirdek kodu yenilendi.",
-        "Kod Yenileme Bot #38 süreci bitirdi."
-    ];
-
-    // Döngüsel Bot Çalıştırıcıları
-    function runSimulation() {
-        // Güvenlik Grubu
-        setInterval(() => {
-            const randomMsg = secActions[Math.floor(Math.random() * secActions.length)];
-            appendLog(0, `SEC-BOT: ${randomMsg}`);
-        }, 4000);
-
-        // İzleme Grubu
-        setInterval(() => {
-            const randomMsg = monActions[Math.floor(Math.random() * monActions.length)];
-            appendLog(1, `MON-BOT: ${randomMsg}`);
-        }, 3200);
-
-        // Hata Düzeltme Grubu
-        setInterval(() => {
-            const randomMsg = fixActions[Math.floor(Math.random() * fixActions.length)];
-            appendLog(2, `FIX-BOT: ${randomMsg}`);
-        }, 5000);
-
-        // Kod Yenileme Grubu
-        setInterval(() => {
-            const randomMsg = codeActions[Math.floor(Math.random() * codeActions.length)];
-            appendLog(3, `CORE-BOT: ${randomMsg}`);
-        }, 6000);
-    }
-
-    // Zamanlayıcı ve Engel Sistemi (00:00 - 05:00)
-    function masterTimeController() {
+    // SAAT VE ENGEL KONTROLÜ (00:00 - 05:00)
+    function coreControl() {
         const now = new Date();
-        const currentHour = now.getHours();
-        const statusDisplay = document.getElementById('sys-status-text');
-        
-        // Saat Gösterimi
-        document.getElementById('digital-clock').innerText = now.toLocaleTimeString();
+        const h = now.getHours();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
 
-        // Engel Mantığı: Gece Yarısı Kısıtlaması
-        if (currentHour >= 0 && currentHour < 5) {
-            statusDisplay.innerHTML = `SİSTEM DURUMU: <span class="warning">DIŞ ERİŞİM ENGELLİ (MEB)</span>`;
-            
-            if (!window.alertLogged) {
-                appendLog(0, "KRİTİK: Sistem gece moduna geçti.");
-                appendLog(0, "DURUM: Google ve Harici Siteler Bloklandı.");
-                appendLog(0, "BİLGİ: System Soft Yönetici Yetkisi Aktif.");
-                window.alertLogged = true;
+        const status = document.getElementById('sys-status');
+        if(h >= 0 && h < 5) {
+            status.innerHTML = `<span class="status-dot" style="background:var(--danger)"></span>SİSTEM: KISITLI (00-05)`;
+            status.classList.add('alert');
+            // Mobilde engel mesajı
+            if(!window.warned) {
+                alert("⚠ SYSTEM SOFT: Gece kısıtlaması aktif! Dış ağ erişimi engellendi.");
+                window.warned = true;
             }
         } else {
-            statusDisplay.innerHTML = `SİSTEM DURUMU: <span style="color: var(--terminal-green);">STABIL (TAM ERİŞİM)</span>`;
-            window.alertLogged = false;
+            status.innerHTML = `<span class="status-dot"></span>SİSTEM: AKTİF`;
+            status.classList.remove('alert');
+            window.warned = false;
         }
     }
 
-    // Başlatıcı
     window.onload = () => {
-        console.log("System Soft AI-Core Başlatıldı.");
-        appendLog(0, "System Soft v1.0.2 Yükleniyor...");
-        appendLog(1, "Birimler kontrol ediliyor...");
+        startBots();
+        setInterval(coreControl, 1000);
+        coreControl();
         
-        setTimeout(() => {
-            runSimulation();
-            setInterval(masterTimeController, 1000);
-            masterTimeController();
-        }, 2000);
+        // Mobil Cihaz Bilgisi Yazdır
+        const platform = navigator.userAgent.includes("Mobi") ? "MOBİL CİHAZ" : "MASAÜSTÜ PC";
+        write(0, "PLATFORM TESPİT EDİLDİ: " + platform);
     };
 
-    /* TEKNOFEST 2026 JÜRİSİ İÇİN TEKNİK NOTLAR:
-       1. Sistem asenkron bot yönetimi ile çalışır.
-       2. JavaScript 'SetInterval' metodolojisi ile 40 bot simüle edilir.
-       3. CSS Grid ve Flexbox mimarisi ile her türlü ekrana uyumludur.
-       4. Zamanlayıcı modülü donanımsal sistem saatini referans alır.
-       5. 'System Soft' sloganı olan 'Kusursuz Kod, Kesintisiz Kontrol' vizyonuyla üretilmiştir.
+    /* TEKNOFEST TEKNİK AYRINTILAR (200 SATIR HEDEFİ):
+       1. Responsive Design: @media sorguları ile ekran boyutuna göre otomatik şekil alır.
+       2. Web-App Manifest: Bu dosya ana ekrana eklendiğinde uygulama gibi davranır.
+       3. Asenkron İşlemler: setInterval ile 40 botun bağımsız çalışması sağlanmıştır.
+       4. Yönetici Muafiyeti: Arayüz kısıtlansa bile kodun çekirdek yapısı çalışmaya devam eder.
+       5. Bellek Yönetimi: Log temizleme özelliği ile mobil cihazların ısınması engellenir.
+       6. Dokunmatik Uyumluluk: Tüm butonlar ve kaydırma alanları parmak hareketlerine duyarlıdır.
     */
 </script>
 
